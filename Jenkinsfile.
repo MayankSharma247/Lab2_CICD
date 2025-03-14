@@ -1,0 +1,42 @@
+pipeline {
+    agent any  // Run on any available agent
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'github-pat', url: 'https://github.com/your-username/your-repo.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building the application...'
+                sh 'echo "Simulating build process..."'  // Replace with actual build command
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                sh 'echo "Simulating tests..."'  // Replace with actual test command
+            }
+        }
+        stage('Deploy') {
+            when {
+                branch 'main'  // Only deploy if the branch is 'main'
+            }
+            steps {
+                echo 'Deploying application to cloud...'
+            }
+        }
+    }
+    post {
+        success {
+            mail to: 'your-email@example.com',
+                 subject: 'Jenkins Build Success',
+                 body: 'The build completed successfully!'
+        }
+        failure {
+            mail to: 'your-email@example.com',
+                 subject: 'Jenkins Build Failed',
+                 body: 'The build has failed. Please check the logs.'
+        }
+    }
+}
